@@ -43,3 +43,5 @@ There are 3 parts to JWT, separated by . (period)
 
 Go to debugger section on [JWT](https://jwt.io) website to decode, verify and generate JWT
 
+### Challenges
+* Expiration of JWT
