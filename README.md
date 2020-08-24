@@ -58,21 +58,6 @@ management.
 hardcoded
 
 
-## How to validate JWT in subsequent requests to server and bypass session managment by the server?
-Here are the steps involved
-
-* Let http security know to do <a href="https://github.com/sreddyiitr/spring-jwt-authorization/blob/master/src/main/java/com/spring/security/jwt/authorization/SpringSecurityConfiguration.java#L66" target="_blank">stateless session management</a>
-* Create a `filter` to intercept each request to the server and parse header to get `JWT`
-* Validate `JWT` and extract `username` from the `JWT`
-* Verify that `username` exists in the user repository
-* Create `usernamePasswordAuthenticationToken` and push it to the spring security context because we are taking over 
-the session validation
-* Finally, Add this `filter` to the `filterchain` before `UsernamePasswordAuthenticationFilter` so that the token
-is available using the `JWT` validation process and the token can be pushed to security context for use by 
-`UsernamePasswordAuthenticationFilter`. Otherwise, it will ask for `username` and `password` again
-
-
-
 ##### Scripts to create users & authorities in PostgreSQL
 ```
 CREATE TABLE USERS (
@@ -97,3 +82,16 @@ INSERT INTO USERS(USERNAME, PASSWORD, ENABLED) VALUES('admin','admin',true);
 INSERT INTO AUTHORITIES(USERNAME, AUTHORITY) VALUES('user','ROLE_USER');
 INSERT INTO AUTHORITIES(USERNAME, AUTHORITY) VALUES('manager','ROLE_MANAGER,ROLE_USER');
 INSERT INTO AUTHORITIES(USERNAME, AUTHORITY) VALUES('admin','ROLE_ADMIN,ROLE_USER');
+
+## How to validate JWT in subsequent requests to server and bypass session managment by the server?
+Here are the steps involved
+
+* Let http security know to do <a href="https://github.com/sreddyiitr/spring-jwt-authorization/blob/master/src/main/java/com/spring/security/jwt/authorization/SpringSecurityConfiguration.java#L66" target="_blank">stateless session management</a>
+* Create a `filter` to intercept each request to the server and parse header to get `JWT`
+* Validate `JWT` and extract `username` from the `JWT`
+* Verify that `username` exists in the user repository
+* Create `usernamePasswordAuthenticationToken` and push it to the spring security context because we are taking over 
+the session validation
+* Finally, Add this `filter` to the `filterchain` before `UsernamePasswordAuthenticationFilter` so that the token
+is available using the `JWT` validation process and the token can be pushed to security context for use by 
+`UsernamePasswordAuthenticationFilter`. Otherwise, it will ask for `username` and `password` again
