@@ -1,15 +1,19 @@
 package com.spring.security.jwt.authorization;
 
+import com.spring.security.jwt.authorization.filters.SpringJwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /*
  * Configure spring security to have custom authentication & authorization
@@ -20,6 +24,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserDetailsService userDetailsService;
+
+    //Added to validate token
+    @Autowired
+    SpringJwtRequestFilter springJwtRequestFilter;
 
     /**
      * Authentication Using JPA
@@ -49,9 +57,16 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //cross site request forgery is disabled. No form login :)
-        http.csrf().disable().authorizeRequests()
+        http.csrf().disable()
+                .authorizeRequests()
                 .antMatchers("/authenticate").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                // Spring security doesn't need to create session because we are taking over
+                // by validating jwt in the header
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        // Since we are doing the validation using jwt, we need to make sure set token in the security context
+        http.addFilterBefore(springJwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

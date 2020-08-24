@@ -14,7 +14,7 @@ import com.spring.security.jpa.authentication.model.SpringJpaUserDetails;
 import java.util.Optional;
 
 @Service
-public class SpringJpaUserDetailsService implements UserDetailsService {
+public class SpringJwtUserDetailsService implements UserDetailsService {
 
     @Autowired
     SpringJpaUserRepository userRepository;
