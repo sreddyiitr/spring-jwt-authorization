@@ -83,6 +83,9 @@ INSERT INTO AUTHORITIES(USERNAME, AUTHORITY) VALUES('user','ROLE_USER');
 INSERT INTO AUTHORITIES(USERNAME, AUTHORITY) VALUES('manager','ROLE_MANAGER,ROLE_USER');
 INSERT INTO AUTHORITIES(USERNAME, AUTHORITY) VALUES('admin','ROLE_ADMIN,ROLE_USER');
 
+```
+
+
 ## How to validate JWT in subsequent requests to server and bypass session managment by the server?
 Here are the steps involved
 
