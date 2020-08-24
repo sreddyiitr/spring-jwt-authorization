@@ -27,4 +27,4 @@ hs_err_pid*
 *.project
 *.idea/
 target/
-*.settings
+*.settings/
